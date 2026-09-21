@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="mx-auto max-w-3xl px-4 py-12">
+  <h1 class="text-4xl font-bold tracking-tight">Recherche</h1>
+  <form class="mt-8" method="get" action="{% url 'search:search' %}">
+    <input
+      class="w-full rounded-2xl border border-slate-300 px-5 py-4 outline-none focus:border-blue-600"
+      type="search"
+      name="q"
+      value="{{ query }}"
+      placeholder="Chercher un article ou un livre..."
+      hx-get="{% url 'search:search' %}"
+      hx-target="#search-results"
+      hx-trigger="keyup changed delay:400ms, search"
+      hx-include="this"
+    >
+  </form>
+  <div id="search-results" class="mt-8">
+    {% include 'search/partials/results.html' %}
+  </div>
+</section>
+{% endblock %}

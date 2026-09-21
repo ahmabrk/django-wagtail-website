@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailsettings_tags %}
+
+{% block content %}
+    {% get_settings %}
+    {% with branding=settings.core.SiteBrandingSettings %}
+
+        <section class="bg-stone-50 pt-10 pb-20">
+            <div class="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8">
+                <a href="/" class="inline-flex flex-col items-center justify-center gap-5 font-serif text-4xl font-light uppercase tracking-widest text-stone-900 sm:text-5xl md:text-6xl" dir="ltr">
+                    {% if branding.logo_svg %}
+                        <img
+                                src="{{ branding.logo_svg.url }}"
+                                alt=""
+                                class="h-16 w-auto sm:h-20 md:h-24"
+                        >
+                    {% else %}
+                        <img
+                                src="{% static 'images/default-logo.svg' %}"
+                                alt=""
+                                class="h-16 w-auto sm:h-20 md:h-24"
+                        >
+                    {% endif %}
+                    <span>{{ branding.site_name|default:'Site name' }}</span>
+                </a>
+                <p class="mt-8 text-sm font-light tracking-widest text-stone-500 sm:text-base">
+                    {{ branding.subtitle|default:page.intro|default:'A flexible Wagtail starter for websites' }}
+                </p>
+            </div>
+        </section>
+
+        <section class="bg-white py-16">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <div class="mb-12 text-center">
+                    <h2 class="font-serif text-3xl font-normal text-stone-900">Latest articles</h2>
+                    <div class="mx-auto mt-4 h-px w-16 bg-stone-300"></div>
+                </div>
+
+                {% if latest_posts %}
+                    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+                        {% for post in latest_posts %}
+                            <article class="group cursor-pointer">
+                                <a href="{% pageurl post %}" class="block">
+                                    <div class="overflow-hidden rounded-sm">
+                                        {% if post.main_image %}
+                                            {% image post.main_image fill-600x400 class="aspect-[3/2] w-full object-cover transition duration-700 group-hover:scale-105" %}
+                                        {% else %}
+                                            <div class="aspect-[3/2] w-full bg-stone-100"></div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="mt-6 text-center">
+                                        <p class="text-xs tracking-widest text-stone-500">{{ post.date|date:'d/m/Y' }}</p>
+                                        <h3 class="mt-3 font-serif text-xl font-normal text-stone-900 transition duration-300 group-hover:text-amber-800">{{ post.title }}</h3>
+                                    </div>
+                                </a>
+                            </article>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-12 text-center">
+                        <a href="/blog/" class="inline-block border-b border-stone-900 pb-1 text-sm font-medium text-stone-900 transition hover:text-amber-800 hover:border-amber-800">All articles</a>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="bg-stone-50 py-16">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <div class="mb-12 text-center">
+                    <h2 class="font-serif text-3xl font-normal text-stone-900">Books</h2>
+                    <div class="mx-auto mt-4 h-px w-16 bg-stone-300"></div>
+                </div>
+
+                {% if latest_books %}
+                    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+                        {% for book in latest_books %}
+                            <article class="group text-center">
+                                <a href="{% pageurl book %}" class="block">
+                                    {% if book.cover_image %}
+                                        {% image book.cover_image fill-500x700 class="mx-auto w-3/4 max-w-sm object-cover shadow-lg transition duration-700 group-hover:-translate-y-2" %}
+                                    {% else %}
+                                        <div class="mx-auto flex aspect-[2/3] w-3/4 max-w-sm items-center justify-center bg-stone-200 shadow-lg">
+                                            <span class="text-sm font-medium tracking-widest text-stone-400">BOOK</span>
+                                        </div>
+                                    {% endif %}
+                                    <h3 class="mt-8 font-serif text-2xl font-normal text-stone-900 transition duration-300 group-hover:text-amber-800">{{ book.title }}</h3>
+                                    {% if book.intro %}<p class="mx-auto mt-3 max-w-xs text-sm text-stone-600">{{ book.intro }}</p>{% endif %}
+                                </a>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+    {% endwith %}
+{% endblock %}

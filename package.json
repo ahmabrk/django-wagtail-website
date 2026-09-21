@@ -1,0 +1,16 @@
+{
+  "name": "wagtail-tailwind-htmx-starter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --watch",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "latest",
+    "@tailwindcss/vite": "latest",
+    "tailwindcss": "latest",
+    "vite": "latest"
+  }
+}

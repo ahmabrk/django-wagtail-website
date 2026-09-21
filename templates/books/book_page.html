@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[360px_1fr]">
+  <div>
+    {% if page.cover_image %}{% image page.cover_image fill-720x1000 class="rounded-3xl shadow-lg" %}{% endif %}
+  </div>
+  <div>
+    <p class="text-sm font-semibold uppercase tracking-wide text-blue-700">{{ page.get_book_type_display }}</p>
+    <h1 class="mt-3 text-4xl font-bold tracking-tight md:text-5xl">{{ page.title }}</h1>
+    {% if page.intro %}<p class="mt-5 text-xl leading-8 text-slate-700">{{ page.intro }}</p>{% endif %}
+    <p class="mt-6 text-3xl font-bold">{{ page.price }} €</p>
+    {% if page.isbn %}<p class="mt-2 text-sm text-slate-500">ISBN : {{ page.isbn }}</p>{% endif %}
+    <div class="mt-8 flex flex-wrap gap-3">
+      <button class="rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+              hx-get="/search/?q={{ page.title|urlencode }}"
+              hx-target="#book-action-result"
+              hx-swap="innerHTML">
+        Tester action HTMX
+      </button>
+      <a class="rounded-full border border-slate-300 px-6 py-3 text-sm font-semibold hover:bg-slate-100" href="mailto:contact@example.com?subject=Commande {{ page.title|urlencode }}">Commander par email</a>
+    </div>
+    <div id="book-action-result" class="mt-4 text-sm text-slate-600"></div>
+
+    <div class="prose prose-slate mt-10 max-w-none">
+      {% include_block page.body %}
+    </div>
+  </div>
+</section>
+{% endblock %}

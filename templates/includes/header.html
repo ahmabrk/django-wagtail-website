@@ -1,0 +1,26 @@
+{% load wagtailsettings_tags %}
+{% get_settings %}
+{% with menu=settings.core.HeaderMenuSettings %}
+<header class="bg-stone-50 py-6" x-data="{ open: false }">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <nav class="hidden md:flex items-center justify-center space-x-12 rtl:space-x-reverse">
+      <a href="{{ menu.first_url|default:'/blog/' }}" class="text-lg font-medium text-stone-600 transition duration-300 hover:text-stone-900">{{ menu.first_label|default:'Blog' }}</a>
+      <span class="h-4 w-px bg-stone-300" aria-hidden="true"></span>
+      <a href="{{ menu.second_url|default:'/livres/' }}" class="text-lg font-medium text-stone-600 transition duration-300 hover:text-stone-900">{{ menu.second_label|default:'Books' }}</a>
+    </nav>
+
+    <div class="flex items-center justify-between md:hidden">
+      <button class="text-stone-600 hover:text-stone-900" @click="open = !open" aria-label="Open menu">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+    <nav x-show="open" x-transition class="mt-4 flex flex-col space-y-4 text-center md:hidden">
+      <a href="{{ menu.first_url|default:'/blog/' }}" class="text-lg font-medium text-stone-600 hover:text-stone-900">{{ menu.first_label|default:'Blog' }}</a>
+      <a href="{{ menu.second_url|default:'/livres/' }}" class="text-lg font-medium text-stone-600 hover:text-stone-900">{{ menu.second_label|default:'Books' }}</a>
+    </nav>
+  </div>
+</header>
+{% endwith %}

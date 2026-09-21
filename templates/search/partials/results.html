@@ -1,0 +1,16 @@
+{% load wagtailcore_tags %}
+{% if query %}
+  <p class="mb-4 text-sm text-slate-500">Résultats pour « {{ query }} »</p>
+  <div class="space-y-4">
+    {% for result in results %}
+      <article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="font-bold"><a class="hover:text-blue-700" href="{% pageurl result %}">{{ result.title }}</a></h2>
+        <p class="mt-1 text-sm text-slate-500">{{ result.specific_class }}</p>
+      </article>
+    {% empty %}
+      <p>Aucun résultat.</p>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-slate-500">Tape un mot-clé pour lancer la recherche dynamique avec HTMX.</p>
+{% endif %}

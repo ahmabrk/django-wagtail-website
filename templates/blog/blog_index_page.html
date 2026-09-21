@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<section class="mx-auto max-w-6xl px-4 py-12">
+  <h1 class="text-4xl font-bold tracking-tight">{{ page.title }}</h1>
+  {% if page.intro %}<p class="mt-4 max-w-2xl text-lg text-slate-700">{{ page.intro }}</p>{% endif %}
+
+  <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {% for post in posts %}
+      <article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+        {% if post.main_image %}{% image post.main_image fill-600x360 class="h-48 w-full object-cover" %}{% endif %}
+        <div class="p-6">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ post.date }}</p>
+          <h2 class="mt-2 text-xl font-bold"><a href="{% pageurl post %}" class="hover:text-blue-700">{{ post.title }}</a></h2>
+          {% if post.intro %}<p class="mt-3 text-sm leading-6 text-slate-600">{{ post.intro }}</p>{% endif %}
+        </div>
+      </article>
+    {% empty %}
+      <p>Aucun article publié pour le moment.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

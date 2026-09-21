@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-wagtail}
+      POSTGRES_USER: ${POSTGRES_USER:-wagtail}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-wagtail}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-wagtail} -d ${POSTGRES_DB:-wagtail}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    command: ./scripts/start-dev.sh
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    tty: true  # <-- TRÈS IMPORTANT : Garde le conteneur actif
+    # On utilise vite build --watch pour générer le fichier physique en continu pour Django
+    command: sh -c "npm install && npx vite build --watch"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    # Plus besoin d'exposer le port 5173 car Django s'occupe de servir le CSS
+volumes:
+  postgres_data:
+  node_modules:
